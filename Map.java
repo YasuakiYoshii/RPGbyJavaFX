@@ -72,6 +72,18 @@ public class Map implements Common {
                 int cx = (mapChipNo % 8) * CS;
                 int cy = (mapChipNo / 8) * CS;
                 gc.drawImage(chipImage, cx, cy, CS, CS, tilesToPixels(j) + offsetX, tilesToPixels(i) + offsetY, CS, CS);
+
+                // (j, i) にあるイベントを描画
+                for (int n=0; n<events.size(); n++) {
+                    Event event = (Event)events.get(n);
+                    // イベントが(j, i)にあれば描画
+                    if (event.x == j && event.y == i) {
+                        mapChipNo = event.chipNo;
+                        cx = (mapChipNo % 8) * CS;
+                        cy = (mapChipNo / 8) * CS;
+                        gc.drawImage(chipImage, cx, cy, CS, CS, tilesToPixels(j) + offsetX, tilesToPixels(i) + offsetY, CS, CS);
+                    }
+                }
             }
         }
 
@@ -256,6 +268,8 @@ public class Map implements Common {
                     makeCharacter(st);
                 } else if (eventType.equals("TREASURE")) {  // 宝箱イベント
                     makeTreasure(st);
+                } else if (eventType.equals("DOOR")) {  // とびらイベント
+                    makeDoor(st);
                 }
             }
         } catch (Exception e) {
@@ -307,6 +321,19 @@ public class Map implements Common {
         TreasureEvent t = new TreasureEvent(x, y, itemName);
         // 宝箱イベントを登録
         events.add(t);
+    }
+
+    /**
+     * とびらイベントを作成
+     */
+    private void makeDoor(StringTokenizer st) {
+        // とびらの座標
+        int x = Integer.parseInt(st.nextToken());
+        int y = Integer.parseInt(st.nextToken());
+        // とびらイベントを作成
+        DoorEvent d = new DoorEvent(x, y);
+        // とびらイベントを登録
+        events.add(d);
     }
 
     /**

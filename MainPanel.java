@@ -259,13 +259,22 @@ class MainPanel extends Pane implements Common {
             TreasureEvent treasure = hero.search();
             if (treasure != null) {
                 // メッセージをセットする
-                messageWindow.setMessage(treasure.getItemName() + "を　てにいれた。。。と思っただけだった。");
+                messageWindow.setMessage(treasure.getItemName() + "を　てにいれた。\\fと、おもっただけだった");
                 // メッセージウィンドウを表示
                 messageWindow.show();
                 // ここにアイテム入手処理を入れる
                 // 宝箱を削除
                 map.removeEvent(treasure);
                 return;  // しらべた場合ははなさない
+            }
+
+            // とびら
+            DoorEvent door = hero.open();
+            if (door != null) {
+                // ドアを削除
+                map.removeEvent(door);
+
+                return;
             }
 
             // はなす
